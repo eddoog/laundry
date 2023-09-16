@@ -1,25 +1,46 @@
 {
-  "name": "laundry",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "@types/node": "20.6.2",
-    "@types/react": "18.2.21",
-    "@types/react-dom": "18.2.7",
-    "autoprefixer": "10.4.15",
-    "eslint": "8.49.0",
-    "eslint-config-next": "13.4.19",
-    "next": "13.4.19",
-    "postcss": "8.4.29",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "tailwindcss": "3.3.3",
-    "typescript": "5.2.2"
-  }
+    "name": "laundry",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start",
+        "lint": "next lint",
+        "check-types": "tsc --pretty --noEmit",
+        "check-format": "prettier --check .",
+        "check-lint": "eslint . --ext ts --ext tsx --ext js",
+        "format": "prettier --write .",
+        "test-all": "pnpm format && pnpm check-format && pnpm check-lint && pnpm check-types",
+        "prepare": "husky install"
+    },
+    "dependencies": {
+        "@chakra-ui/next-js": "^2.1.5",
+        "@chakra-ui/react": "^2.8.1",
+        "@emotion/react": "^11.11.1",
+        "@emotion/styled": "^11.11.0",
+        "@types/node": "20.6.2",
+        "@types/react": "18.2.21",
+        "@types/react-dom": "18.2.7",
+        "eslint": "8.49.0",
+        "eslint-config-next": "13.4.19",
+        "framer-motion": "^10.16.4",
+        "next": "13.4.19",
+        "react": "18.2.0",
+        "react-dom": "18.2.0",
+        "typescript": "5.2.2"
+    },
+    "devDependencies": {
+        "@tsconfig/next": "^2.0.0",
+        "@typescript-eslint/eslint-plugin": "^6.7.0",
+        "@typescript-eslint/parser": "^6.7.0",
+        "autoprefixer": "10.4.15",
+        "eslint-config-google": "^0.14.0",
+        "eslint-config-prettier": "^9.0.0",
+        "eslint-plugin-react": "^7.33.2",
+        "husky": "^8.0.0",
+        "postcss": "8.4.29",
+        "prettier": "^3.0.3",
+        "tailwindcss": "3.3.3"
+    }
 }
