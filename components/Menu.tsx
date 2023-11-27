@@ -1,4 +1,4 @@
-"use client";
+'use client'
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -6,12 +6,10 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
-import { cn } from "@/lib/utils";
-import Link from "next/link";
-import React from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+} from '@/components/ui/navigation-menu'
+import { cn } from '@/lib/utils'
+import React from 'react'
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,11 +17,11 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
+} from './ui/dropdown-menu'
 
 export function Menu() {
   return (
-    <div className="flex flex-row justify-between w-full py-3 px-8">
+    <div className="flex flex-row justify-between items-center w-full">
       <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>
@@ -51,12 +49,6 @@ export function Menu() {
                 <ListItem href="/register" title="Register Yourself">
                   Register yourself to get started!
                 </ListItem>
-                {/* <ListItem
-                                    href="/docs/primitives/typography"
-                                    title="Typography"
-                                >
-                                    Styles for headings, paragraphs, lists...etc
-                                </ListItem> */}
               </ul>
             </NavigationMenuContent>
           </NavigationMenuItem>
@@ -80,12 +72,12 @@ export function Menu() {
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
-  );
+  )
 }
 
 const ListItem = React.forwardRef<
-  React.ElementRef<"a">,
-  React.ComponentPropsWithoutRef<"a">
+  React.ElementRef<'a'>,
+  React.ComponentPropsWithoutRef<'a'>
 >(({ className, title, children, ...props }, ref) => {
   return (
     <li>
@@ -93,8 +85,8 @@ const ListItem = React.forwardRef<
         <a
           ref={ref}
           className={cn(
-            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-            className,
+            'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
+            className
           )}
           {...props}
         >
@@ -105,6 +97,6 @@ const ListItem = React.forwardRef<
         </a>
       </NavigationMenuLink>
     </li>
-  );
-});
-ListItem.displayName = "ListItem";
+  )
+})
+ListItem.displayName = 'ListItem'

@@ -1,8 +1,8 @@
-"use client";
-import { TypeAnimation } from "react-type-animation";
-import { AspectRatio } from "./ui/aspect-ratio";
-import { Button } from "./ui/button";
-import Link from "next/link";
+'use client'
+import { TypeAnimation } from 'react-type-animation'
+import { AspectRatio } from './ui/aspect-ratio'
+import { Button } from './ui/button'
+import Link from 'next/link'
 
 export function Introduction() {
   return (
@@ -15,38 +15,48 @@ export function Introduction() {
       </h3>
       <TypeAnimation
         sequence={[
-          "We will laundry your clothes!",
+          'We will laundry your clothes!',
           1000,
-          "We will laundry your shoes!",
+          'We will laundry your shoes!',
           1000,
-          "We will laundry your socks!",
+          'We will laundry your socks!',
           1000,
-          "We will laundry your underwear!",
+          'We will laundry your underwear!',
           1000,
-          "We will laundry your bedsheets!",
+          'We will laundry your bedsheets!',
           1000,
-          "We will laundry your curtains!",
+          'We will laundry your curtains!',
           1000,
-          "We will laundry your bags!",
+          'We will laundry your bags!',
           1000,
-          "We will manage your laundry!",
+          'We will manage your laundry!',
         ]}
         wrapper="span"
         omitDeletionAnimation={true}
         style={{
-          fontSize: "1em",
+          fontSize: '1em',
           fontWeight: 700,
-          display: "inline-block",
+          display: 'inline-block',
         }}
       />
       <div className="flex flex-col sm:flex-row gap-6 items-center justify-center">
         <Link href="/login">
-          <Button className="font-bold">Login to your account!</Button>
+          <Button
+            className="font-bold px-8 py-6 rounded-lg"
+            variant={'outline'}
+          >
+            Login to your account!
+          </Button>
         </Link>
         <Link href="/register">
-          <Button className="font-bold">Register to get started!</Button>
+          <Button
+            className="font-bold px-8 py-6 rounded-lg"
+            variant={'outline'}
+          >
+            Register to get started!
+          </Button>
         </Link>
       </div>
     </div>
-  );
+  )
 }

@@ -4,16 +4,20 @@ import { Icons } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { useToast } from '@/components/ui/use-toast'
+import { Role } from '@/lib/enum'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 
 type FormValues = {
   email: string
   password: string
+  name: string
+  role: Role
 }
 
-export default function Login() {
+export default function Register() {
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
   const { toast } = useToast()
 
@@ -33,18 +37,20 @@ export default function Login() {
   const {
     register,
     handleSubmit,
+    watch,
+    setValue,
     formState: { errors },
   } = useForm<FormValues>()
 
   return (
     <div className="flex-1 flex items-center mt-2">
-      <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px] p-8 border-4 border-gray-400 border-opacity-30 rounded-xl h-fit">
+      <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[360px] p-8 border-4 border-gray-400 border-opacity-30 rounded-xl h-fit">
         <div className="flex flex-col space-y-2 text-center">
           <h1 className="text-2xl font-semibold tracking-tight">
-            Login to your account
+            Register to get started!
           </h1>
           <p className="text-sm text-muted-foreground">
-            Enter your email and password below to login to your account
+            Enter your email, password, and name below to register yourself
           </p>
         </div>
         <div className={'grid gap-6'}>
@@ -109,11 +115,67 @@ export default function Login() {
                   </div>
                 )}
               </div>
+              <div className="grid gap-1">
+                <Label
+                  htmlFor="name"
+                  className="text-sm font-bold text-muted-foreground"
+                >
+                  Name
+                </Label>
+                <Input
+                  id="name"
+                  placeholder="Ujang Suparman"
+                  type="text"
+                  disabled={isLoading}
+                  {...register('name', {
+                    required: {
+                      value: true,
+                      message: 'Name is required',
+                    },
+                  })}
+                />
+                {errors.name && (
+                  <div className="text-sm text-destructive font-bold">
+                    {errors.name.message}
+                  </div>
+                )}
+              </div>
+              <div className="grid gap-2">
+                <Label
+                  htmlFor="role"
+                  className="text-sm font-bold text-muted-foreground"
+                >
+                  Role
+                </Label>
+                <RadioGroup className="flex flex-col sm:flex-row sm:justify-between sm:items-center justify-center items-stretch">
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem
+                      value="PELANGGAN"
+                      id="PELANGGAN"
+                      onClick={(e) => setValue('role', Role.PELANGGAN)}
+                    />
+                    <Label htmlFor="PELANGGAN">Pelanggan</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem
+                      value="PENGELOLA_LAUNDRY"
+                      id="PENGELOLA_LAUNDRY"
+                      onClick={(e) => setValue('role', Role.PENGELOLA_LAUNDRY)}
+                    />
+                    <Label htmlFor="PENGELOLA_LAUNDRY">Pengelola Laundry</Label>
+                  </div>
+                </RadioGroup>
+                {watch('role') === undefined && (
+                  <div className="text-sm text-destructive font-bold">
+                    Role is required
+                  </div>
+                )}
+              </div>
               <Button disabled={isLoading} className="mt-2" variant="outline">
                 {isLoading && (
                   <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                 )}
-                Sign In with Email
+                Sign Up
               </Button>
             </div>
           </form>
