@@ -57,10 +57,7 @@ export function Menu() {
       <DropdownMenu>
         <DropdownMenuTrigger>
           <Avatar>
-            <AvatarImage
-              src="https://github.com/shadcn.png"
-              alt="@LaundryEase"
-            />
+            <AvatarImage src={'/assets/batman.png'} alt="@LaundryEase" />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
