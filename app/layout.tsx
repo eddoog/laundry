@@ -21,12 +21,13 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={
-          inter.className +
-          ' flex min-h-screen flex-col items-center w-full bg-[#181818] relative py-3 px-8'
+          inter.className + ' relative min-h-screen w-full bg-[#181818]'
         }
       >
-        <Menu />
-        {children}
+        <div className="flex flex-col items-center relative min-h-screen py-3 px-8">
+          <Menu />
+          {children}
+        </div>
         <Image
           className="fixed z-[-1] top-0 left-0 w-full h-full opacity-50"
           src={'/assets/bg-purple.svg'}

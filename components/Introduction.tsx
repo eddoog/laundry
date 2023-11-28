@@ -3,10 +3,12 @@ import { TypeAnimation } from 'react-type-animation'
 import { AspectRatio } from './ui/aspect-ratio'
 import { Button } from './ui/button'
 import Link from 'next/link'
+import { useToast } from './ui/use-toast'
 
 export function Introduction() {
+  const { toast } = useToast()
   return (
-    <div className="flex flex-col gap-6 justify-center items-center text-center lg:py-48 md:py-40 sm:py-32 py-8 px-12 sm:px-16 md:px-20 lg:px-24">
+    <div className="flex-1 flex flex-col gap-6 justify-center items-center text-center lg:py-48 md:py-40 sm:py-32 py-8 px-12 sm:px-16 md:px-20 lg:px-24 ">
       <h1 className="lg:text-5xl md:text-4xl sm:text-3xl text-2xl font-bold">
         LaundryEase
       </h1>
@@ -40,14 +42,20 @@ export function Introduction() {
         }}
       />
       <div className="flex flex-col sm:flex-row gap-6 items-center justify-center">
-        <Link href="/login">
-          <Button
-            className="font-bold px-8 py-6 rounded-lg"
-            variant={'outline'}
-          >
-            Login to your account!
-          </Button>
-        </Link>
+        {/* <Link href="/login"> */}
+        <Button
+          className="font-bold px-8 py-6 rounded-lg"
+          variant={'outline'}
+          onClick={() => {
+            toast({
+              title: 'Scheduled: Catch up',
+              description: 'Friday, February 10, 2023 at 5:57 PM',
+            })
+          }}
+        >
+          Login to your account!
+        </Button>
+        {/* </Link> */}
         <Link href="/register">
           <Button
             className="font-bold px-8 py-6 rounded-lg"
