@@ -7,6 +7,8 @@ import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { useToast } from '@/components/ui/use-toast'
 import { Role } from '@/lib/enum'
+import { AuthenticatedFetch, setCookies } from '@/lib/request'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 
@@ -20,18 +22,50 @@ type FormValues = {
 export default function Register() {
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
   const { toast } = useToast()
+  const router = useRouter()
 
   async function onSubmit(data: FormValues) {
     setIsLoading(true)
 
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 3000)
+    try {
+      const formData = new FormData()
 
-    toast({
-      title: 'Scheduled: Catch up ',
-      description: 'Friday, February 10, 2023 at 5:57 PM',
-    })
+      formData.append('email', data.email)
+      formData.append('password', data.password)
+      formData.append('name', data.name)
+      formData.append('role', data.role)
+
+      const res = await AuthenticatedFetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/register`,
+        {
+          method: 'POST',
+          body: formData,
+        }
+      )
+
+      if (!res.ok) {
+        throw new Error('Something went wrong, please try again later.')
+      }
+
+      const dt = await res.json()
+
+      const token = dt.data.accessToken
+
+      setCookies('token', token)
+
+      toast({
+        title: 'Success',
+        description: 'You have successfully registered your account.',
+      })
+
+      router.push('/')
+    } catch (error) {
+      console.log(error)
+      toast({
+        title: 'Error',
+        description: 'Something went wrong, please try again later.',
+      })
+    }
   }
 
   const {
