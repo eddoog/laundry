@@ -1,9 +1,10 @@
 import { Menu } from '@/components/Menu'
-import './globals.css'
+import { Toaster } from '@/components/ui/toaster'
+import { AuthProvider } from '@/lib/context'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Image from 'next/image'
-import { Toaster } from '@/components/ui/toaster'
+import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -24,18 +25,20 @@ export default function RootLayout({
           inter.className + ' relative min-h-screen w-full bg-[#181818]'
         }
       >
-        <div className="flex flex-col items-center relative min-h-screen py-3 px-8">
-          <Menu />
-          {children}
-        </div>
-        <Image
-          className="fixed z-[-1] top-0 left-0 w-full h-full opacity-50"
-          src={'/assets/bg-purple.svg'}
-          priority={false}
-          alt="bg"
-          fill
-        />
-        <Toaster />
+        <AuthProvider>
+          <div className="flex flex-col items-center relative min-h-screen py-3 px-8">
+            <Menu />
+            {children}
+          </div>
+          <Image
+            className="fixed z-[-1] top-0 left-0 w-full h-full opacity-50"
+            src={'/assets/bg-purple.svg'}
+            priority={false}
+            alt="bg"
+            fill
+          />
+          <Toaster />
+        </AuthProvider>
       </body>
     </html>
   )

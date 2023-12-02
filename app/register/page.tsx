@@ -6,8 +6,9 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { useToast } from '@/components/ui/use-toast'
+import { useAuthContext } from '@/lib/context'
 import { Role } from '@/lib/enum'
-import { AuthenticatedFetch, setCookies } from '@/lib/request'
+import { AuthRequest, AuthenticatedFetch, setCookies } from '@/lib/request'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 import { useForm } from 'react-hook-form'
@@ -21,51 +22,29 @@ type FormValues = {
 
 export default function Register() {
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
+  const { setAccessToken } = useAuthContext()
   const { toast } = useToast()
   const router = useRouter()
 
   async function onSubmit(data: FormValues) {
     setIsLoading(true)
+    const formData = new FormData()
 
-    try {
-      const formData = new FormData()
+    formData.append('email', data.email)
+    formData.append('password', data.password)
+    formData.append('name', data.name)
+    formData.append('role', data.role)
 
-      formData.append('email', data.email)
-      formData.append('password', data.password)
-      formData.append('name', data.name)
-      formData.append('role', data.role)
+    await AuthRequest(
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/register`,
+      formData,
+      toast,
+      router,
+      setAccessToken,
+      false
+    )
 
-      const res = await AuthenticatedFetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/register`,
-        {
-          method: 'POST',
-          body: formData,
-        }
-      )
-
-      if (!res.ok) {
-        throw new Error('Something went wrong, please try again later.')
-      }
-
-      const dt = await res.json()
-
-      const token = dt.data.accessToken
-
-      setCookies('token', token)
-
-      toast({
-        title: 'Success',
-        description: 'You have successfully registered your account.',
-      })
-
-      router.push('/')
-    } catch (error) {
-      console.log(error)
-      toast({
-        title: 'Error',
-        description: 'Something went wrong, please try again later.',
-      })
-    }
+    setIsLoading(false)
   }
 
   const {
