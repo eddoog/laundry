@@ -12,27 +12,25 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Separator } from '@/components/ui/separator'
-import { Tags } from '@/lib/enum'
-import {
-  ChevronDownIcon,
-  CircleIcon,
-  LockClosedIcon,
-  MixIcon,
-  PlusIcon,
-  StarFilledIcon,
-} from '@radix-ui/react-icons'
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
+import { Tags } from '@/lib/enum'
+import {
+  ChevronDownIcon,
+  CircleIcon,
+  LockClosedIcon,
+  MixIcon,
+  StarFilledIcon,
+} from '@radix-ui/react-icons'
 
 export function LaundryCard() {
   const tags: Tags[] = [Tags.SEPATU, Tags.BAJU, Tags.SEPRAI, Tags.JAKET]
