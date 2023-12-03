@@ -31,18 +31,46 @@ import {
   MixIcon,
   StarFilledIcon,
 } from '@radix-ui/react-icons'
+import { Skeleton } from './ui/skeleton'
+import { useRouter } from 'next/navigation'
 
-export function LaundryCard() {
-  const tags: Tags[] = [Tags.SEPATU, Tags.BAJU, Tags.SEPRAI, Tags.JAKET]
+export function LaundryCard({ ...props }) {
+  const router = useRouter()
+
+  const { userId, name, address, rating, tags, isLoading } = props as {
+    userId: string
+    name: string
+    address: string
+    rating: number
+    tags: Tags[]
+    isLoading: boolean
+  }
 
   return (
-    <Card className="cursor-pointer hover:scale-105 transition-transform ease-in-out duration-300">
+    <Card
+      className="cursor-pointer hover:scale-105 transition-transform ease-in-out duration-300"
+      onClick={() => {
+        if (isLoading && userId) return
+        router.push('/laundries/' + userId)
+      }}
+    >
       <CardHeader className="grid sm:grid-cols-[1fr_120px] items-start gap-4 space-y-0">
         <div className="space-y-1 flex flex-col flex-wrap">
-          <CardTitle>LaundryEase</CardTitle>
-          <CardDescription>
-            Kota Baru Bandar Kemayoran Psr Mobil Kemayoran Bl D/33, Jakarta
-          </CardDescription>
+          {isLoading && (
+            <>
+              <Skeleton className="w-24 h-4 rounded-md" />
+              <Skeleton className="w-40 h-4 rounded-md" />
+            </>
+          )}
+          {!isLoading && (
+            <>
+              <CardTitle>{name}</CardTitle>
+              <CardDescription>
+                {address === null && 'No address'}
+                {address !== null && address}
+              </CardDescription>
+            </>
+          )}
         </div>
         <div className="flex items-center space-x-1 rounded-md bg-secondary text-secondary-foreground justify-between sm:justify-start">
           <Button variant="secondary" className="px-3 shadow-none">
@@ -96,19 +124,40 @@ export function LaundryCard() {
       <CardContent>
         <div className="flex space-x-4 text-sm text-muted-foreground">
           <div className="flex items-center">
-            <CircleIcon className="mr-1 h-3 w-3 fill-sky-400 text-sky-400" />
-            {tags.length == 0 && 'No tags'}
-            {tags.length > 0 &&
-              tags.map((tag, index) => (
-                <span key={tag}>
-                  {tag.slice(0, 1) + tag.slice(1).toLowerCase()}
-                  {index !== tags.length - 1 && ', '}
-                </span>
-              ))}
+            {isLoading && (
+              <>
+                <Skeleton className="w-3 h-3 rounded-full" />
+                <Skeleton className="w-3 h-3 rounded-full" />
+                <Skeleton className="w-3 h-3 rounded-full" />
+              </>
+            )}
+            {!isLoading && (
+              <>
+                <CircleIcon className="mr-1 h-3 w-3 fill-sky-400 text-sky-400" />
+                {tags.length == 0 && 'No tags'}
+                {tags.length > 0 &&
+                  tags.map((tag, index) => (
+                    <span key={tag}>
+                      {tag.slice(0, 1) + tag.slice(1).toLowerCase()}
+                      {index !== tags.length - 1 && ', '}
+                    </span>
+                  ))}
+              </>
+            )}
           </div>
           <div className="flex items-center text-yellow-500">
-            <StarFilledIcon className="mr-1 h-3 w-3" />
-            <span className="text-muted-foreground">5</span>
+            {isLoading && (
+              <>
+                <Skeleton className="w-3 h-3 rounded-full" />
+                <Skeleton className="w-3 h-3 rounded-full" />
+              </>
+            )}
+            {!isLoading && (
+              <>
+                <StarFilledIcon className="mr-1 h-3 w-3" />
+                <span className="text-muted-foreground">{rating}</span>
+              </>
+            )}
           </div>
         </div>
       </CardContent>
