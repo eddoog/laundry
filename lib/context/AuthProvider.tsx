@@ -20,6 +20,7 @@ type AuthContextValue = {
   setUser: (user: User | null) => void
   setAccessToken: (token: string | undefined) => void
   loading: boolean
+  setDate: (date: Date) => void
 }
 
 const AuthContext = createContext({} as AuthContextValue) // TODO: Declare interface of contextValue
@@ -30,6 +31,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState<boolean>(true)
   const [accessToken, setAccessToken] = useState<string | undefined>(undefined)
+  const [date, setDate] = useState<Date>(new Date())
 
   useEffect(() => {
     setAccessToken(getCookie('token'))
@@ -40,7 +42,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     async function fetchUser() {
       let user: User | null = null
 
-      if (accessToken) {
+      if (accessToken && date) {
         user = await AuthenticatedFetch(
           `${process.env.NEXT_PUBLIC_API_URL}/user`,
           {
@@ -56,7 +58,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     fetchUser()
     setLoading(false)
-  }, [accessToken])
+  }, [accessToken, date])
 
   return (
     <AuthContext.Provider
@@ -65,6 +67,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setUser,
         setAccessToken,
         loading,
+        setDate,
       }}
     >
       {children}
