@@ -226,10 +226,10 @@ export default function EditJadwal() {
                             )
                             ? true
                             : user?.jadwalOperasional?.find(
-                                (jadwal) => jadwal.hari === item.hari
-                              )
-                            ? false
-                            : true
+                                  (jadwal) => jadwal.hari === item.hari
+                                )
+                              ? false
+                              : true
                           : !item.isOpen
                       }
                       key={
@@ -262,10 +262,10 @@ export default function EditJadwal() {
                             )
                             ? true
                             : user?.jadwalOperasional?.find(
-                                (jadwal) => jadwal.hari === item.hari
-                              )
-                            ? false
-                            : true
+                                  (jadwal) => jadwal.hari === item.hari
+                                )
+                              ? false
+                              : true
                           : !item.isOpen
                       }
                       key={
@@ -305,10 +305,10 @@ export default function EditJadwal() {
                         )
                           ? false
                           : user?.jadwalOperasional?.find(
-                              (jadwal) => jadwal.hari === item.hari
-                            )
-                          ? true
-                          : item.isOpen
+                                (jadwal) => jadwal.hari === item.hari
+                              )
+                            ? true
+                            : item.isOpen
                       }
                       onCheckedChange={(checked: boolean) =>
                         handleSwitchChange(index, checked)
