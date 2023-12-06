@@ -9,6 +9,7 @@ type User = {
   image: string
   role: Role
   pesanan: Pesanan[]
+  deskripsi?: string
   tags?: Tags[]
   jadwalOperasional?: JadwalOperasional[]
   pemasukan?: Pemasukan[]
@@ -29,8 +30,8 @@ type Pesanan = {
 type JadwalOperasional = {
   id: string
   hari: Days
-  jamBuka: String
-  jamTutup: String
+  jamBuka: string
+  jamTutup: string
   pengelolaLaundryId: string
 }
 

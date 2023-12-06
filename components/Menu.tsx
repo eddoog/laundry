@@ -126,6 +126,9 @@ export function Menu() {
                   <Link href="/edit-profile">
                     <DropdownMenuItem>Edit Profile</DropdownMenuItem>
                   </Link>
+                  <Link href="/edit-keamanan">
+                    <DropdownMenuItem>Edit Keamanan</DropdownMenuItem>
+                  </Link>
                   <DropdownMenuItem
                     onClick={() => {
                       setAccessToken(undefined)
