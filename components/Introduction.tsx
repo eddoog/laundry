@@ -13,12 +13,12 @@ export function Introduction() {
     <div className="flex flex-col gap-4 md:gap-6 justify-center items-center text-center px-12 sm:px-16 md:px-20 lg:px-24 py-6">
       {loading && (
         <>
-          <Skeleton className="h-8 w-[180px]" />
-          <Skeleton className="h-6 w-[250px]" />
-          <Skeleton className="h-5 w-[150px]" />
+          <Skeleton className="h-8 sm:h-16 w-[210px] sm:w-[280px] md:w-[320px]" />
+          <Skeleton className="h-10 sm:h-12 w-[240px] sm:w-[320px] md:w-[360px]" />
+          <Skeleton className="h-5 sm:h-8 sm:w-[210px] md:w-[260px]" />
           <div className="flex flex-col sm:flex-row gap-6 items-center justify-center">
-            <Skeleton className="h-4 w-[100px]" />
-            <Skeleton className="h-4 w-[100px]" />
+            <Skeleton className="h-8 sm:h-12 w-[180px] sm:w-[240px] md:w-[280px]" />
+            <Skeleton className="h-8 sm:h-12 w-[180px] sm:w-[240px] md:w-[280px]" />
           </div>
         </>
       )}
@@ -79,7 +79,7 @@ export function Introduction() {
               </>
             )}
             {user && (
-              <Link href="/my-pesanan">
+              <Link href="/pesanan">
                 <Button
                   className="font-bold px-8 py-6 rounded-lg hover:scale-110 transition-transform ease-in-out duration-300"
                   variant={'outline'}
