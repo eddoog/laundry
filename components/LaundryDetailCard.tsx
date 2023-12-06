@@ -1,6 +1,4 @@
 'use client'
-import { useMediaQuery } from '@/lib/hooks/useMediaQuery'
-import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -8,26 +6,16 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/components/ui/sheet'
 import { Skeleton } from '@/components/ui/skeleton'
-import { AuthenticatedFetch } from '@/lib/request'
-import { PropsWithChildren, useEffect, useState } from 'react'
 import { Tags } from '@/lib/enum'
+import { useMediaQuery } from '@/lib/hooks/useMediaQuery'
+import { AuthenticatedFetch } from '@/lib/request'
 import { AvatarIcon, CircleIcon, StarFilledIcon } from '@radix-ui/react-icons'
-import { useToast } from './ui/use-toast'
+import { useRouter } from 'next/navigation'
+import { PropsWithChildren, useEffect, useState } from 'react'
 import { CreatePesananUI } from './CreatePesananUI'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
+import { useToast } from './ui/use-toast'
 
 type Laundry = {
   userId: string
@@ -48,6 +36,7 @@ export function LaundryDetailCard(
   const [isLoading, setIsLoading] = useState(true)
   const { toast } = useToast()
   const { id } = props
+  const router = useRouter()
 
   const [
     { userId: _, name, address, deskripsi, image, rating, ulasan, tags },
@@ -63,15 +52,24 @@ export function LaundryDetailCard(
         )
         const data = await response.json()
 
-        if (data.statusCode != 200) {
+        if (data.statusCode === 401 || data.statusCode === 403) {
+          router.push('/login')
+          toast({
+            title: 'Error',
+            description: 'Silahkan login terlebih dahulu',
+            duration: 3000,
+          })
+        } else if (data.statusCode >= 400) {
           toast({
             title: 'Error',
             description: data.message,
+            duration: 3000,
           })
-        }
-        const laundry = data.data
+        } else {
+          const laundry = data.data
 
-        setLaundry(laundry)
+          setLaundry(laundry)
+        }
       } catch (e) {
         if (typeof e === 'string') {
           e.toUpperCase()
@@ -90,16 +88,10 @@ export function LaundryDetailCard(
 
     fetchLaundry()
     setIsLoading(false)
-  }, [id, toast])
+  }, [id, router, toast])
 
   const isBreakpoint = useMediaQuery(768)
 
-  const tryReview = [
-    'Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum magnam voluptatem provident facere aliquam temporibus odio neque et similique non.',
-    'Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum magnam voluptatem provident facere aliquam temporibus odio neque et similique non.',
-    'Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum magnam voluptatem provident facere aliquam temporibus odio neque et similique non.',
-    'Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum magnam voluptatem provident facere aliquam temporibus odio neque et similique non.',
-  ]
   return (
     <div className="flex flex-col md:w-4/5 w-full mt-4 rounded-xl">
       <Card>
