@@ -23,10 +23,12 @@ import { Skeleton } from './ui/skeleton'
 import Link from 'next/link'
 import { deleteCookie } from 'cookies-next'
 import { useToast } from './ui/use-toast'
+import { useRouter } from 'next/navigation'
 
 export function Menu() {
   const { user, loading, setAccessToken } = useAuthContext()
   const { toast } = useToast()
+  const router = useRouter()
 
   return (
     <div className="flex flex-row justify-between items-center w-full">
@@ -126,6 +128,9 @@ export function Menu() {
                   <Link href="/edit-profile">
                     <DropdownMenuItem>Edit Profile</DropdownMenuItem>
                   </Link>
+                  <Link href="/edit-keamanan">
+                    <DropdownMenuItem>Edit Keamanan</DropdownMenuItem>
+                  </Link>
                   <DropdownMenuItem
                     onClick={() => {
                       setAccessToken(undefined)
@@ -134,6 +139,7 @@ export function Menu() {
                         title: 'Success',
                         description: 'You have successfully logged out.',
                       })
+                      router.push('/login')
                     }}
                   >
                     Logout

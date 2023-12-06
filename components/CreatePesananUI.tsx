@@ -1,7 +1,8 @@
-import React from 'react'
+import { AuthenticatedFetch } from '@/lib/request'
 import { cn } from '@/lib/utils'
 import { CalendarIcon } from '@radix-ui/react-icons'
 import { addDays, format } from 'date-fns'
+import React from 'react'
 import { Button } from './ui/button'
 import { Calendar } from './ui/calendar'
 import { Label } from './ui/label'
@@ -23,9 +24,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from './ui/sheet'
-import { AuthenticatedFetch } from '@/lib/request'
 import { useToast } from './ui/use-toast'
-import { Skeleton } from './ui/skeleton'
+import { useRouter } from 'next/navigation'
 
 export function CreatePesananUI(
   props: React.PropsWithChildren<{
@@ -37,6 +37,7 @@ export function CreatePesananUI(
   const { laundryId, isBreakpoint, isLoading } = props
   const [date, setDate] = React.useState<Date>()
   const { toast } = useToast()
+  const router = useRouter()
 
   async function onSubmit() {
     const body = {
@@ -58,14 +59,19 @@ export function CreatePesananUI(
 
       const data = await res.json()
 
-      if (data.statusCode != 200) {
+      if (data.statusCode != 201) {
         toast({
           title: 'Error',
           description: data.message,
         })
-      }
+      } else {
+        toast({
+          title: 'Success',
+          description: data.message,
+        })
 
-      console.log(data)
+        router.push('/pesanan')
+      }
     } catch (e) {
       if (typeof e === 'string') {
         e.toUpperCase()
