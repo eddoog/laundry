@@ -12,385 +12,360 @@ import { useRouter } from 'next/navigation'
 import React, { use, useEffect } from 'react'
 import { set, useForm } from 'react-hook-form'
 
-
 import { Tags } from '@/lib/enum'
 
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-  } from "@/components/ui/dialog"
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 
-
-  
 type FormValues = {
-    email : string
-    password : string
-    confirmPassword : string
-    validationPassword : string
+  email: string
+  password: string
+  confirmPassword: string
+  validationPassword: string
 }
-
-
 
 export default function EditKeamanan() {
-    const [isLoading, setIsLoading] = React.useState<boolean>(false)
-    const { user,loading, setDate} = useAuthContext()
-    const { toast } = useToast()
-    const router = useRouter()
-    const [isValidate, setIsValidate] = React.useState<boolean>(false)
+  const [isLoading, setIsLoading] = React.useState<boolean>(false)
+  const { user, loading, setDate } = useAuthContext()
+  const { toast } = useToast()
+  const router = useRouter()
+  const [isValidate, setIsValidate] = React.useState<boolean>(false)
 
+  async function onSubmitEmail(data: FormValues) {
+    setIsLoading(true)
 
-    async function onSubmitEmail(data: FormValues){        
-        setIsLoading(true)
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/user/update-email`
+    const newData = {
+      email: data.email,
+    }
 
-        const url = `${process.env.NEXT_PUBLIC_API_URL}/user/update-email`;
-        const newData = {
-            email : data.email,
-        }
+    console.log(newData)
 
-        console.log(newData)
+    try {
+      const res = await AuthenticatedFetch(url, {
+        method: 'PATCH',
+        body: JSON.stringify(newData),
+        headers: { 'Content-Type': 'application/json' },
+      })
 
-        try {
-            const res = await AuthenticatedFetch(url, {
-            method: 'PATCH',
-            body: JSON.stringify(newData),
-            headers: {'Content-Type': 'application/json' }
-            })
-        
-            const dt = await res.json()
-        
-            if (dt.statusCode >= 400) {
-                toast({
-                title: 'Error',
-                description: dt.message,
-                })
-            } else {
-                setDate(new Date())
+      const dt = await res.json()
 
-                toast({
-                title: 'Success',
-                description: `${ 
-                    'You have successfully update your email, please log in again'
-                }`,
-            })
-            router.push('/login')
-            }
-        } catch (error) {
-            
-            toast({
-            title: 'Error',
-            description: 'Something went wrong, please try again later.',
-            })
-        }
-        setIsLoading(false)
-        };
-    
+      if (dt.statusCode >= 400) {
+        toast({
+          title: 'Error',
+          description: dt.message,
+        })
+      } else {
+        setDate(new Date())
 
-    async function onSubmitPassword(data: FormValues){        
-        setIsLoading(true)
+        toast({
+          title: 'Success',
+          description: `${'You have successfully update your email, please log in again'}`,
+        })
+        router.push('/login')
+      }
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Something went wrong, please try again later.',
+      })
+    }
+    setIsLoading(false)
+  }
 
-        console.log(data)
+  async function onSubmitPassword(data: FormValues) {
+    setIsLoading(true)
 
-        const url = `${process.env.NEXT_PUBLIC_API_URL}/user/update-password`;
-        const newData = {
-            password : data.password,
-            confirmPassword : data.confirmPassword
-        }
+    console.log(data)
 
-        console.log(newData)
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/user/update-password`
+    const newData = {
+      password: data.password,
+      confirmPassword: data.confirmPassword,
+    }
 
-        try {
-            const res = await AuthenticatedFetch(url, {
-            method: 'PATCH',
-            body: JSON.stringify(newData),
-            headers: {'Content-Type': 'application/json' }
-            })
-        
-            const dt = await res.json()
-        
-            if (dt.statusCode >= 400) {
-                toast({
-                title: 'Error',
-                description: dt.message,
-                })
-            } else {
-                setDate(new Date())
+    console.log(newData)
 
-                toast({
-                title: 'Success',
-                description: `${ 
-                    'You have successfully update your password, please log in again'
-                }`,
+    try {
+      const res = await AuthenticatedFetch(url, {
+        method: 'PATCH',
+        body: JSON.stringify(newData),
+        headers: { 'Content-Type': 'application/json' },
+      })
 
-            }
-            )
-            router.push('/login')
-            }
-        } catch (error) {
-            
-            toast({
-            title: 'Error',
-            description: 'Something went wrong, please try again later.',
-            })
-        }
-        setIsLoading(false)
-        };
-    
-    async function onSubmitValidation(data: FormValues){        
-        setIsLoading(true)
+      const dt = await res.json()
 
-        const url = `${process.env.NEXT_PUBLIC_API_URL}/user/validate-password`;
-        const newData = {
-            password : data.validationPassword,
-        }
+      if (dt.statusCode >= 400) {
+        toast({
+          title: 'Error',
+          description: dt.message,
+        })
+      } else {
+        setDate(new Date())
 
+        toast({
+          title: 'Success',
+          description: `${'You have successfully update your password, please log in again'}`,
+        })
+        router.push('/login')
+      }
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Something went wrong, please try again later.',
+      })
+    }
+    setIsLoading(false)
+  }
 
-        try {
-            const res = await AuthenticatedFetch(url, {
-            method: 'POST',
-            body: JSON.stringify(newData),
-            headers: {'Content-Type': 'application/json' }
-            })
-        
-            const dt = await res.json()
-        
-            if (dt.statusCode >= 400) {
-                toast({
-                title: 'Error',
-                description: dt.message,
-                })
-            } else {
-                console.log(dt)
-                setIsValidate(true)
-            }
+  async function onSubmitValidation(data: FormValues) {
+    setIsLoading(true)
 
-        } catch (error) {
-            
-            toast({
-            title: 'Error',
-            description: 'Something went wrong, please try again later.',
-            })
-        }
-        setIsLoading(false)
-        };
-    
-    const {
-        register : registerForm1,
-        handleSubmit : handleSubmitForm1,
-        formState: { errors : errorsForm1  },
-    }   = useForm<FormValues>()
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/user/validate-password`
+    const newData = {
+      password: data.validationPassword,
+    }
 
-    const {
-        register: registerForm2,
-        handleSubmit: handleSubmitForm2,
-        formState: { errors : errorsForm2 },
-    }   = useForm<FormValues>()
+    try {
+      const res = await AuthenticatedFetch(url, {
+        method: 'POST',
+        body: JSON.stringify(newData),
+        headers: { 'Content-Type': 'application/json' },
+      })
 
-    const {
-        register: registerValidation,
-        handleSubmit: handleSubmitValidation,
-        formState: { errors : errorsValidation },
-    }   = useForm<FormValues>()
+      const dt = await res.json()
 
-    return (
-    
-      <div className="flex-1 flex items-center mt-2">
-        {user && user.name != undefined && (
+      if (dt.statusCode >= 400) {
+        toast({
+          title: 'Error',
+          description: dt.message,
+        })
+      } else {
+        console.log(dt)
+        setIsValidate(true)
+      }
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Something went wrong, please try again later.',
+      })
+    }
+    setIsLoading(false)
+  }
+
+  const {
+    register: registerForm1,
+    handleSubmit: handleSubmitForm1,
+    formState: { errors: errorsForm1 },
+  } = useForm<FormValues>()
+
+  const {
+    register: registerForm2,
+    handleSubmit: handleSubmitForm2,
+    formState: { errors: errorsForm2 },
+  } = useForm<FormValues>()
+
+  const {
+    register: registerValidation,
+    handleSubmit: handleSubmitValidation,
+    formState: { errors: errorsValidation },
+  } = useForm<FormValues>()
+
+  return (
+    <div className="flex-1 flex items-center mt-2">
+      {user && user.name != undefined && (
         <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[360px] p-8 border-4 border-gray-400 border-opacity-30 rounded-xl h-fit">
-            <h1 className="text-2xl font-semibold tracking-tight text-center text-muted-foreground">
+          <h1 className="text-2xl font-semibold tracking-tight text-center text-muted-foreground">
             Keamanan Akun
-            </h1>
-        
-            <div className={'grid gap-6'}>
-            
+          </h1>
+
+          <div className={'grid gap-6'}>
             {!loading && (
-                <div className='flex flex-col gap-2'>
-                <Dialog open={! isValidate}>
-                    <DialogContent className="sm:max-w-[425px]">
-                        <DialogHeader>
-                        <DialogTitle>Account Verification</DialogTitle>
-                        <DialogDescription>
-                            Please insert your current password to continue
-                        </DialogDescription>
-                        </DialogHeader>
-                        <div className="grid gap-4 py-4">
-
-                        <form onSubmit={handleSubmitValidation(onSubmitValidation)}>
-                            <div className="flex flex-col items- gap-4 mb-4">
-                                <Label
-                                    htmlFor="validation"
-                                    className="text-sm font-bold text-muted-foreground"
-                                >
-                                    Current Password
-                                </Label>
-                                <Input
-                                    id="validation"
-                                    type="password"
-                                    disabled={isLoading}
-                                    className='w-full col-span-3'
-                                    {...registerValidation('validationPassword', {
-                                        required: {
-                                            value: true,
-                                            message: 'field cannot be empty',
-                                        },
-                                        })}
-                                />
-                                {errorsValidation.validationPassword && (
-                                    <div className="text-sm text-destructive font-bold">
-                                    {errorsValidation.validationPassword.message}
-                                    </div>
-                                )}
+              <div className="flex flex-col gap-2">
+                <Dialog open={!isValidate}>
+                  <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                      <DialogTitle>Account Verification</DialogTitle>
+                      <DialogDescription>
+                        Please insert your current password to continue
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="grid gap-4 py-4">
+                      <form
+                        onSubmit={handleSubmitValidation(onSubmitValidation)}
+                      >
+                        <div className="flex flex-col items- gap-4 mb-4">
+                          <Label
+                            htmlFor="validation"
+                            className="text-sm font-bold text-muted-foreground"
+                          >
+                            Current Password
+                          </Label>
+                          <Input
+                            id="validation"
+                            type="password"
+                            disabled={isLoading}
+                            className="w-full col-span-3"
+                            {...registerValidation('validationPassword', {
+                              required: {
+                                value: true,
+                                message: 'field cannot be empty',
+                              },
+                            })}
+                          />
+                          {errorsValidation.validationPassword && (
+                            <div className="text-sm text-destructive font-bold">
+                              {errorsValidation.validationPassword.message}
                             </div>
-
-                                <div  className='flex justify-between mt-4'>
-                                    <Button type='button' onClick={() => router.push('/')} disabled={isLoading}>back</Button>
-                                    <Button type='submit' disabled={isLoading}>Submit</Button>
-                                </div>
-
-                        </form>
- 
+                          )}
                         </div>
 
-                    </DialogContent>
+                        <div className="flex justify-between mt-4">
+                          <Button
+                            type="button"
+                            onClick={() => router.push('/')}
+                            disabled={isLoading}
+                          >
+                            back
+                          </Button>
+                          <Button type="submit" disabled={isLoading}>
+                            Submit
+                          </Button>
+                        </div>
+                      </form>
+                    </div>
+                  </DialogContent>
                 </Dialog>
 
                 <Dialog>
-                    <DialogTrigger asChild>
-                        <Button variant="outline">Edit Email</Button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-[425px]">
-                        <DialogHeader>
-                        <DialogTitle>Edit Email</DialogTitle>
-                        </DialogHeader>
-                        <div className="grid gap-4 py-4">
-
-                        <form onSubmit={handleSubmitForm1(onSubmitEmail)}>
-                            <div className="flex flex-col items- gap-4 mb-4">
-                                <Label
-                                    htmlFor="email"
-                                    className="text-sm font-bold text-muted-foreground"
-                                >
-                                    New Email
-                                </Label>
-                                <Input
-                                    id="email"
-                                    type="text"
-                                    disabled={isLoading}
-                                    className='w-full col-span-3'
-                                    {...registerForm1('email', {
-                                        required: {
-                                            value: true,
-                                            message: 'field cannot be empty',
-                                        },
-                                        })}
-                                />
-                                {errorsForm1.email && (
-                                    <div className="text-sm text-destructive font-bold">
-                                    {errorsForm1.email.message}
-                                    </div>
-                                )}
+                  <DialogTrigger asChild>
+                    <Button variant="outline">Edit Email</Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                      <DialogTitle>Edit Email</DialogTitle>
+                    </DialogHeader>
+                    <div className="grid gap-4 py-4">
+                      <form onSubmit={handleSubmitForm1(onSubmitEmail)}>
+                        <div className="flex flex-col items- gap-4 mb-4">
+                          <Label
+                            htmlFor="email"
+                            className="text-sm font-bold text-muted-foreground"
+                          >
+                            New Email
+                          </Label>
+                          <Input
+                            id="email"
+                            type="text"
+                            disabled={isLoading}
+                            className="w-full col-span-3"
+                            {...registerForm1('email', {
+                              required: {
+                                value: true,
+                                message: 'field cannot be empty',
+                              },
+                            })}
+                          />
+                          {errorsForm1.email && (
+                            <div className="text-sm text-destructive font-bold">
+                              {errorsForm1.email.message}
                             </div>
-
-                            <DialogFooter>
-                                <Button type='submit' disabled={isLoading}>Save</Button>
-                            </DialogFooter>
-                        </form>
- 
+                          )}
                         </div>
 
-                    </DialogContent>
+                        <DialogFooter>
+                          <Button type="submit" disabled={isLoading}>
+                            Save
+                          </Button>
+                        </DialogFooter>
+                      </form>
+                    </div>
+                  </DialogContent>
                 </Dialog>
 
                 <Dialog>
-                    <DialogTrigger asChild>
-                        <Button variant="outline">Edit Password</Button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-[425px]">
-                        <DialogHeader>
-                        <DialogTitle>Edit Password</DialogTitle>
-                        </DialogHeader>
-                        <div className="grid gap-4 py-4">
-
-                        <form onSubmit={handleSubmitForm2(onSubmitPassword)}>
-                            <div className="flex flex-col items- gap-4 mb-4">
-                                <Label
-                                    htmlFor="password"
-                                    className="text-sm font-bold text-muted-foreground"
-                                >
-                                    New Password
-                                </Label>
-                                <Input
-                                    id="password"
-                                    type="password"
-                                    disabled={isLoading}
-                                    className='w-full col-span-3'
-                                    {...registerForm2('password', {
-                                        required: {
-                                            value: true,
-                                            message: 'field cannot be empty',
-                                        },
-                                        })}
-                                />
-                                {errorsForm2.password && (
-                                    <div className="text-sm text-destructive font-bold">
-                                    {errorsForm2.password.message}
-                                    </div>
-                                )}
+                  <DialogTrigger asChild>
+                    <Button variant="outline">Edit Password</Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                      <DialogTitle>Edit Password</DialogTitle>
+                    </DialogHeader>
+                    <div className="grid gap-4 py-4">
+                      <form onSubmit={handleSubmitForm2(onSubmitPassword)}>
+                        <div className="flex flex-col items- gap-4 mb-4">
+                          <Label
+                            htmlFor="password"
+                            className="text-sm font-bold text-muted-foreground"
+                          >
+                            New Password
+                          </Label>
+                          <Input
+                            id="password"
+                            type="password"
+                            disabled={isLoading}
+                            className="w-full col-span-3"
+                            {...registerForm2('password', {
+                              required: {
+                                value: true,
+                                message: 'field cannot be empty',
+                              },
+                            })}
+                          />
+                          {errorsForm2.password && (
+                            <div className="text-sm text-destructive font-bold">
+                              {errorsForm2.password.message}
                             </div>
-
-                            <div className="flex flex-col items- gap-4 mb-4">
-                                <Label
-                                    htmlFor="confirmPassword"
-                                    className="text-sm font-bold text-muted-foreground"
-                                >
-                                    Confirmm Password
-                                </Label>
-                                <Input
-                                    id="address"
-                                    type="password"
-                                    disabled={isLoading}
-                                    className='w-full col-span-3'
-                                    {...registerForm2('confirmPassword', {
-                                        required: {
-                                            value: true,
-                                            message: 'field cannot be empty',
-                                        },
-                                        })}
-                                />
-                                {errorsForm2.confirmPassword && (
-                                    <div className="text-sm text-destructive font-bold">
-                                    {errorsForm2.confirmPassword.message}
-                                    </div>
-                                )}
-                            </div>
-
-                            <DialogFooter>
-                                <Button type='submit' disabled={isLoading}>Save</Button>
-                            </DialogFooter>
-                        </form>
- 
+                          )}
                         </div>
 
-                    </DialogContent>
+                        <div className="flex flex-col items- gap-4 mb-4">
+                          <Label
+                            htmlFor="confirmPassword"
+                            className="text-sm font-bold text-muted-foreground"
+                          >
+                            Confirmm Password
+                          </Label>
+                          <Input
+                            id="address"
+                            type="password"
+                            disabled={isLoading}
+                            className="w-full col-span-3"
+                            {...registerForm2('confirmPassword', {
+                              required: {
+                                value: true,
+                                message: 'field cannot be empty',
+                              },
+                            })}
+                          />
+                          {errorsForm2.confirmPassword && (
+                            <div className="text-sm text-destructive font-bold">
+                              {errorsForm2.confirmPassword.message}
+                            </div>
+                          )}
+                        </div>
+
+                        <DialogFooter>
+                          <Button type="submit" disabled={isLoading}>
+                            Save
+                          </Button>
+                        </DialogFooter>
+                      </form>
+                    </div>
+                  </DialogContent>
                 </Dialog>
-
-
-                
-                </div>
+              </div>
             )}
-
-
           </div>
         </div>
-        )}
-      </div>
-
-
-    )
-
+      )}
+    </div>
+  )
 }
-  
