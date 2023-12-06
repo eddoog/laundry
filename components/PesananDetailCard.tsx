@@ -24,6 +24,19 @@ import {
 } from './ui/card'
 import { Skeleton } from './ui/skeleton'
 import { useToast } from './ui/use-toast'
+import { Alert, AlertDescription, AlertTitle } from './ui/alert'
+import { Terminal } from 'lucide-react'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from './ui/alert-dialog'
 
 type PesananWithNames = Pesanan & {
   pengelolaLaundryName: string
@@ -132,10 +145,71 @@ export function PesananDetailCard(
     })
   }
 
+  async function cancelPesanan() {
+    try {
+      const res = await AuthenticatedFetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/pelanggan/cancel-pesanan`,
+        {
+          method: 'DELETE',
+          body: JSON.stringify({
+            idPesanan: pesananId,
+          }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      )
+
+      const data = await res.json()
+
+      if (data.statusCode >= 400) {
+        toast({
+          title: 'Error',
+          description: 'Gagal membatalkan pesanan',
+        })
+      } else {
+        router.push('/pesanan')
+        toast({
+          title: 'Success',
+          description: 'Berhasil membatalkan pesanan',
+        })
+      }
+    } catch (e) {
+      if (typeof e === 'string') {
+        e.toUpperCase()
+        toast({
+          title: 'Error',
+          description: e,
+        })
+      } else if (e instanceof Error) {
+        toast({
+          title: 'Error',
+          description: e.message,
+        })
+      }
+    }
+  }
+
   const isBreakpoint = useMediaQuery(768)
 
   return (
-    <div className="flex flex-col md:w-4/5 w-full mt-4 rounded-xl">
+    <div className="flex flex-col md:w-4/5 w-full mt-4 rounded-xl gap-4 sm:gap-6">
+      {isLoading && <Skeleton className="w-full h-16 rounded-md" />}
+      {!isLoading && (
+        <>
+          {user?.role == Role.PELANGGAN &&
+            status == StatusPesanan.MENUNGGU_KONFIRMASI && (
+              <Alert>
+                <Terminal className="h-4 w-4" />
+                <AlertTitle>Tips!</AlertTitle>
+                <AlertDescription>
+                  Karena pesanan anda masih dalam tahap menunggu konfirmasi,
+                  anda dapat membatalkan pesanan anda.
+                </AlertDescription>
+              </Alert>
+            )}
+        </>
+      )}
       <Card>
         <CardHeader className="grid sm:grid-cols-[1fr_120px] items-start gap-4 space-y-0">
           <div className="space-y-1 flex flex-col flex-wrap">
@@ -170,13 +244,32 @@ export function PesananDetailCard(
               {user?.role == Role.PELANGGAN ? (
                 <>
                   {status && status == StatusPesanan.MENUNGGU_KONFIRMASI && (
-                    <Button
-                      variant="secondary"
-                      className="flex-wrap"
-                      onClick={() => {}}
-                    >
-                      Cancel Pesanan
-                    </Button>
+                    <AlertDialog>
+                      <AlertDialogTrigger className="bg-secondary text-secondary-foreground hover:bg-secondary/80 rounded-lg">
+                        Cancel Pesanan
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>
+                            Apakah anda yakin?
+                          </AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Aksi ini tidak dapat diurungkan. Pesanan anda akan
+                            secara permanen dihapus dari server kami.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={() => {
+                              cancelPesanan()
+                            }}
+                          >
+                            Continue
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   )}
                 </>
               ) : (
