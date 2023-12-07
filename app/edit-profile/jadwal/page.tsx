@@ -111,7 +111,7 @@ export default function EditJadwal() {
 
   useEffect(() => {
     initJadwal()
-  }, [user])
+  }, [user, initJadwal])
 
   const timeFormat = 'HH:mm'
   const onChange = (

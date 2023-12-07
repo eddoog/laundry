@@ -177,7 +177,7 @@ export default function EditProfil() {
     setname(user?.name)
     setaddress(user?.address)
     setdeskripsi(user?.deskripsi)
-  }, [user])
+  }, [user, setValue])
 
   return (
     <div className="flex-1 flex items-center mt-2">
