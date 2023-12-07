@@ -6,7 +6,7 @@ import { useToast } from '@/components/ui/use-toast'
 import { useAuthContext } from '@/lib/context'
 import { AuthRequest, AuthenticatedFetch, setCookies } from '@/lib/request'
 import { useRouter, usePathname } from 'next/navigation'
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 
 import { Days } from '@/lib/enum'
 import dayjs, { Dayjs } from 'dayjs'
@@ -84,7 +84,7 @@ export default function EditJadwal() {
   const [jadwal, setJadwal] = React.useState(inisialJadwal)
 
   // Fungsi untuk menginisialisasi jadwal
-  const initJadwal = () => {
+  const initJadwal = useCallback(() => {
     if (user?.jadwalOperasional) {
       const updatedJadwal = [...jadwal]
 
@@ -107,7 +107,7 @@ export default function EditJadwal() {
       }
       setJadwal(updatedJadwal)
     }
-  }
+  }, [user, jadwal])
 
   useEffect(() => {
     initJadwal()
