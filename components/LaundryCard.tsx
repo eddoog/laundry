@@ -159,7 +159,9 @@ export function LaundryCard({ ...props }) {
             {!isLoading && (
               <>
                 <StarFilledIcon className="mr-1 h-3 w-3 fill-yellow-400 text-yellow-400" />
-                <span className="text-muted-foreground">{rating}</span>
+                <span className="text-muted-foreground">
+                  {rating?.toFixed(2)}
+                </span>
               </>
             )}
           </div>

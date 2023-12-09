@@ -14,6 +14,7 @@ import {
 import { useRouter } from 'next/navigation'
 import { PropsWithChildren, useEffect, useState } from 'react'
 import { EditStatusPesananUI } from './EditStatusPesananUI'
+import { CreatePenilaianUI } from './CreatePenilaianUI'
 import { Button } from './ui/button'
 import {
   Card,
@@ -64,6 +65,7 @@ export function PesananDetailCard(
       status,
       waktuPenyelesaian,
       waktuPesanan,
+      pengelolaLaundryId,
     },
     setPesanan,
   ] = useState<Partial<PesananWithNames>>({})
@@ -243,6 +245,13 @@ export function PesananDetailCard(
             <>
               {user?.role == Role.PELANGGAN ? (
                 <>
+                  {status === StatusPesanan.SELESAI && (
+                    <CreatePenilaianUI
+                      laundryId={pengelolaLaundryId!}
+                      isBreakpoint={isBreakpoint}
+                      isLoading={isLoading}
+                    />
+                  )}
                   {status && status == StatusPesanan.MENUNGGU_KONFIRMASI && (
                     <AlertDialog>
                       <AlertDialogTrigger className="bg-secondary text-secondary-foreground hover:bg-secondary/80 rounded-lg">
@@ -350,7 +359,7 @@ export function PesananDetailCard(
                       {!pelangganName && 'Pelanggan name is not known'}
                       {pelangganName &&
                         pelangganName.slice(0, 1).toUpperCase() +
-                          pelangganName.slice(1)}
+                        pelangganName.slice(1)}
                     </span>
                   </span>
                 </CardDescription>
@@ -375,7 +384,7 @@ export function PesananDetailCard(
                         'Pengelola Laundry name is not known'}
                       {pengelolaLaundryName &&
                         pengelolaLaundryName.slice(0, 1).toUpperCase() +
-                          pengelolaLaundryName.slice(1)}
+                        pengelolaLaundryName.slice(1)}
                     </span>
                   </span>
                 </CardDescription>

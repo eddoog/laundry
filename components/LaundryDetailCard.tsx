@@ -176,20 +176,25 @@ export function LaundryDetailCard(
               <>
                 <CardTitle>Reviews</CardTitle>
                 <CardDescription>
-                  {ulasan && ulasan?.length === 0 && 'No Reviews'}
-                  <span className="flex flex-col gap-2">
-                    {ulasan &&
-                      ulasan?.length > 0 &&
-                      ulasan.map((review, index) => (
-                        <span
-                          className="flex flex-row gap-2 items-center"
-                          key={review + index}
+                  {isLoading ? (
+                    <Skeleton className="w-20 h-10 rounded-md" />
+                  ) : ulasan && ulasan.length > 0 ? (
+                    <div className="flex flex-col gap-2">
+                      {ulasan.map((review, index) => (
+                        <div
+                          className="flex flex-row items-center gap-2 break-words"
+                          key={`review_${index}`}
                         >
                           <AvatarIcon className="w-10 h-10" />
-                          <span>{review}</span>
-                        </span>
+                          <p className="flex-1 overflow-wrap min-w-0">
+                            {review}
+                          </p>
+                        </div>
                       ))}
-                  </span>
+                    </div>
+                  ) : (
+                    'No Reviews'
+                  )}
                 </CardDescription>
               </>
             )}
@@ -228,7 +233,9 @@ export function LaundryDetailCard(
               {!isLoading && (
                 <>
                   <StarFilledIcon className="mr-1 h-3 w-3" />
-                  <span className="text-muted-foreground">{rating}</span>
+                  <span className="text-muted-foreground">
+                    {rating?.toFixed(2)}
+                  </span>
                 </>
               )}
             </div>
