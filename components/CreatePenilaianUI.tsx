@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { Button } from './ui/button'
 import { Label } from './ui/label'
-import { Input } from './ui/input'
 import {
   Sheet,
   SheetContent,
@@ -14,7 +13,6 @@ import {
 } from './ui/sheet'
 import { Textarea } from './ui/textarea'
 import { useToast } from './ui/use-toast'
-import { useRouter, usePathname } from 'next/navigation'
 import { AuthenticatedFetch } from '@/lib/request'
 import Box from '@mui/material/Box'
 import Rating from './ui/rating'
@@ -37,8 +35,6 @@ export function CreatePenilaianUI(
     ulasan: '',
   })
   const { toast } = useToast()
-  const router = useRouter()
-  const pathname = usePathname()
 
   async function onSubmit() {
     if (penilaian.rating === 0) {
@@ -86,7 +82,11 @@ export function CreatePenilaianUI(
           title: 'Success',
           description: 'Penilaian berhasil dibuat',
         })
-        router.push(pathname)
+
+        setPenilaian({
+          rating: 0,
+          ulasan: '',
+        });
       }
     } catch (e) {
       if (typeof e === 'string') {
@@ -123,7 +123,6 @@ export function CreatePenilaianUI(
               justifyContent="space-between"
               alignItems="center"
             >
-              <Label style={{ marginRight: 'auto' }}>Rating</Label>
               <Rating
                 rating={penilaian.rating}
                 setRating={(newRating: number | null) => {
