@@ -133,13 +133,41 @@ export default function EditJadwal() {
     console.log(newData)
   }
 
-  async function onSubmit() {
-    setIsLoading(true)
+  async function onSubmit(event : React.FormEvent<HTMLFormElement>) {
+    event.preventDefault()
 
     const url = `${process.env.NEXT_PUBLIC_API_URL}/pengelola-laundry/edit-jadwal`
     let newJadwal = []
 
+
+    let isValid : boolean = true
+
     for (let i = 0; i < jadwal.length; i++) {
+      const jamBuka : number = parseInt(jadwal[i].jamBuka.split(':')[0])
+      const jamTutup : number = parseInt(jadwal[i].jamTutup.split(':')[0])
+
+      const menitBuka : number = parseInt(jadwal[i].jamBuka.split(':')[1])
+      const menitTutup : number = parseInt(jadwal[i].jamTutup.split(':')[1])
+
+      if (jamBuka > jamTutup) {
+        isValid = false
+        toast({
+          title: 'Error',
+          description: `${'Opening hours must not exceed closing hours'}`,
+        })
+        return
+      } else if (jamBuka == jamTutup ){
+        if (menitBuka > menitTutup) {
+          isValid = false
+
+          toast({
+            title: 'Error',
+            description: `${'Opening hours must not exceed closing hours'}`,
+          })
+          return
+        }
+      }
+
       let newData = {
         hari: jadwal[i].hari,
         jamBuka: jadwal[i].jamBuka,
@@ -152,9 +180,19 @@ export default function EditJadwal() {
       newJadwal.push(newData)
     }
 
+    if (isValid) {
+      
+    } else {
+      return false
+    }   
+
+    console.log("ARRRHHH")
+
     const body = {
       jadwalOperasional: newJadwal,
     }
+
+    setIsLoading(true)
 
     try {
       const res = await AuthenticatedFetch(url, {
