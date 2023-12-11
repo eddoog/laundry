@@ -125,6 +125,11 @@ export function Menu() {
               )}
               {user && (
                 <>
+                  {user.role === 'PENGELOLA_LAUNDRY' && (
+                    <Link href={`/laundries/${user.id}`}>
+                      <DropdownMenuItem>See Profile</DropdownMenuItem>
+                    </Link>
+                  )}
                   <Link href="/edit-profile">
                     <DropdownMenuItem>Edit Profile</DropdownMenuItem>
                   </Link>

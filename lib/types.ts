@@ -28,7 +28,6 @@ type Pesanan = {
 }
 
 type JadwalOperasional = {
-  id: string
   hari: Days
   jamBuka: string
   jamTutup: string

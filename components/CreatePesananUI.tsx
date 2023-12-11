@@ -112,9 +112,10 @@ export function CreatePesananUI(
             <Popover>
               <PopoverTrigger asChild>
                 <Button
+                  id="waktu"
                   variant={'outline'}
                   className={cn(
-                    'w-[280px] justify-start text-left font-normal',
+                    'w-full justify-start text-left font-normal',
                     !date && 'text-muted-foreground'
                   )}
                 >
@@ -132,14 +133,18 @@ export function CreatePesananUI(
                     <SelectValue placeholder="Select" />
                   </SelectTrigger>
                   <SelectContent position="popper">
-                    <SelectItem value="0">Today</SelectItem>
                     <SelectItem value="1">Tomorrow</SelectItem>
                     <SelectItem value="3">In 3 days</SelectItem>
                     <SelectItem value="7">In a week</SelectItem>
                   </SelectContent>
                 </Select>
-                <div className="rounded-md border">
-                  <Calendar mode="single" selected={date} onSelect={setDate} />
+                <div className="rounded-md border w-full">
+                  <Calendar
+                    mode="single"
+                    selected={date}
+                    onSelect={setDate}
+                    className="w-full"
+                  />
                 </div>
               </PopoverContent>
             </Popover>{' '}

@@ -7,15 +7,22 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
-import { Tags } from '@/lib/enum'
+import { Role, Tags } from '@/lib/enum'
 import { useMediaQuery } from '@/lib/hooks/useMediaQuery'
 import { AuthenticatedFetch } from '@/lib/request'
-import { AvatarIcon, CircleIcon, StarFilledIcon } from '@radix-ui/react-icons'
+import {
+  AvatarIcon,
+  CalendarIcon,
+  CircleIcon,
+  StarFilledIcon,
+} from '@radix-ui/react-icons'
 import { useRouter } from 'next/navigation'
 import { PropsWithChildren, useEffect, useState } from 'react'
 import { CreatePesananUI } from './CreatePesananUI'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { useToast } from './ui/use-toast'
+import { useAuthContext } from '@/lib/context'
+import { JadwalOperasional } from '@/lib/types'
 
 type Laundry = {
   userId: string
@@ -26,6 +33,7 @@ type Laundry = {
   rating: number
   ulasan: string[]
   tags: Tags[]
+  jadwalOperasional: JadwalOperasional[]
 }
 
 export function LaundryDetailCard(
@@ -37,9 +45,20 @@ export function LaundryDetailCard(
   const { toast } = useToast()
   const { id } = props
   const router = useRouter()
+  const { user } = useAuthContext()
 
   const [
-    { userId: _, name, address, deskripsi, image, rating, ulasan, tags },
+    {
+      userId: _,
+      name,
+      address,
+      deskripsi,
+      image,
+      rating,
+      ulasan,
+      tags,
+      jadwalOperasional,
+    },
     setLaundry,
   ] = useState<Partial<Laundry>>({})
 
@@ -100,9 +119,9 @@ export function LaundryDetailCard(
             {isLoading && (
               <div className="flex flex-row gap-4 items-center">
                 <Skeleton className="w-20 h-20 rounded-full" />
-                <div className="flex flex-col gap-2">
-                  <Skeleton className="w-30 h-10 rounded-md" />
-                  <Skeleton className="w-40 h-4 rounded-md" />
+                <div className="flex flex-1 flex-col gap-2">
+                  <Skeleton className="w-full h-10 rounded-md" />
+                  <Skeleton className="w-full h-4 rounded-md" />
                 </div>
               </div>
             )}
@@ -140,11 +159,13 @@ export function LaundryDetailCard(
             )}
           </div>
           {isLoading && <Skeleton className="w-30 h-8 rounded-md" />}
-          <CreatePesananUI
-            laundryId={id}
-            isBreakpoint={isBreakpoint}
-            isLoading={isLoading}
-          />
+          {user && user.role === Role.PELANGGAN && !isLoading && (
+            <CreatePesananUI
+              laundryId={id}
+              isBreakpoint={isBreakpoint}
+              isLoading={isLoading}
+            />
+          )}
         </CardHeader>
         <CardContent>
           <div className="flex flex-col gap-2 justify-start">
@@ -185,13 +206,47 @@ export function LaundryDetailCard(
                           className="flex flex-row items-center gap-2 break-words"
                           key={`review_${index}`}
                         >
-                          <AvatarIcon className="w-10 h-10" />
+                          <AvatarIcon className="w-8 h-8" />
                           <p className="flex-1 overflow-wrap min-w-0">
                             {review}
                           </p>
                         </div>
                       ))}
                     </div>
+                  ) : (
+                    'No Reviews'
+                  )}
+                </CardDescription>
+              </>
+            )}
+          </div>
+          <div className="flex flex-col gap-2 justify-start mt-6">
+            {isLoading && (
+              <>
+                <Skeleton className="w-20 h-10 rounded-md" />
+                <Skeleton className="w-30 h-30 rounded-md" />
+              </>
+            )}
+            {!isLoading && (
+              <>
+                <CardTitle>Jadwal Operasional</CardTitle>
+                <CardDescription>
+                  {isLoading ? (
+                    <Skeleton className="w-20 h-10 rounded-md" />
+                  ) : jadwalOperasional && jadwalOperasional.length > 0 ? (
+                    <span className="flex flex-col gap-2">
+                      {jadwalOperasional.map((jadwal, index) => (
+                        <span
+                          className="flex flex-row items-center gap-2 break-words"
+                          key={`jadwal_${index}`}
+                        >
+                          <CalendarIcon className="w-6 h-6" />
+                          <span className="flex-1 overflow-wrap min-w-0">
+                            {jadwal.hari} {jadwal.jamBuka} - {jadwal.jamTutup}
+                          </span>
+                        </span>
+                      ))}
+                    </span>
                   ) : (
                     'No Reviews'
                   )}

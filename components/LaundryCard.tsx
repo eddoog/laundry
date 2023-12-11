@@ -99,6 +99,17 @@ export function LaundryCard({ ...props }) {
                     <DropdownMenuSeparator />
                     <TooltipTrigger>
                       <DropdownMenuCheckboxItem
+                        className="flex gap-2 items-center"
+                        onClick={() => {
+                          if (isLoading && userId) return
+                          router.push('/laundries/' + userId)
+                        }}
+                      >
+                        See Profile
+                      </DropdownMenuCheckboxItem>
+                    </TooltipTrigger>
+                    <TooltipTrigger>
+                      <DropdownMenuCheckboxItem
                         disabled={true}
                         className="flex gap-2 items-center"
                       >

@@ -4,19 +4,18 @@ import { Icons } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/use-toast'
 import { useAuthContext } from '@/lib/context'
-import { AuthRequest, AuthenticatedFetch, setCookies } from '@/lib/request'
-import { useRouter, usePathname } from 'next/navigation'
-import React, { useCallback, useEffect } from 'react'
+import { AuthenticatedFetch } from '@/lib/request'
+import { useRouter } from 'next/navigation'
+import React, { useEffect } from 'react'
 
-import { Days } from '@/lib/enum'
-import dayjs, { Dayjs } from 'dayjs'
-import { TimePicker } from 'antd'
 import { Switch } from '@/components/ui/switch'
+import { Days } from '@/lib/enum'
+import { TimePicker } from 'antd'
+import dayjs, { Dayjs } from 'dayjs'
 
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -25,7 +24,7 @@ import {
 
 export default function EditJadwal() {
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
-  const { user, loading, setAccessToken } = useAuthContext()
+  const { user } = useAuthContext()
   const { toast } = useToast()
   const router = useRouter()
 
@@ -84,7 +83,7 @@ export default function EditJadwal() {
   const [jadwal, setJadwal] = React.useState(inisialJadwal)
 
   // Fungsi untuk menginisialisasi jadwal
-  const initJadwal = useCallback(() => {
+  const initJadwal = () => {
     if (user?.jadwalOperasional) {
       const updatedJadwal = [...jadwal]
 
@@ -107,11 +106,10 @@ export default function EditJadwal() {
       }
       setJadwal(updatedJadwal)
     }
-  }, [user, jadwal])
-
+  }
   useEffect(() => {
     initJadwal()
-  }, [user, initJadwal])
+  }, [user])
 
   const timeFormat = 'HH:mm'
   const onChange = (
@@ -133,21 +131,20 @@ export default function EditJadwal() {
     console.log(newData)
   }
 
-  async function onSubmit(event : React.FormEvent<HTMLFormElement>) {
+  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
     const url = `${process.env.NEXT_PUBLIC_API_URL}/pengelola-laundry/edit-jadwal`
     let newJadwal = []
 
-
-    let isValid : boolean = true
+    let isValid: boolean = true
 
     for (let i = 0; i < jadwal.length; i++) {
-      const jamBuka : number = parseInt(jadwal[i].jamBuka.split(':')[0])
-      const jamTutup : number = parseInt(jadwal[i].jamTutup.split(':')[0])
+      const jamBuka: number = parseInt(jadwal[i].jamBuka.split(':')[0])
+      const jamTutup: number = parseInt(jadwal[i].jamTutup.split(':')[0])
 
-      const menitBuka : number = parseInt(jadwal[i].jamBuka.split(':')[1])
-      const menitTutup : number = parseInt(jadwal[i].jamTutup.split(':')[1])
+      const menitBuka: number = parseInt(jadwal[i].jamBuka.split(':')[1])
+      const menitTutup: number = parseInt(jadwal[i].jamTutup.split(':')[1])
 
       if (jamBuka > jamTutup) {
         isValid = false
@@ -156,7 +153,7 @@ export default function EditJadwal() {
           description: `${'Opening hours must not exceed closing hours'}`,
         })
         return
-      } else if (jamBuka == jamTutup ){
+      } else if (jamBuka == jamTutup) {
         if (menitBuka > menitTutup) {
           isValid = false
 
@@ -181,12 +178,9 @@ export default function EditJadwal() {
     }
 
     if (isValid) {
-      
     } else {
       return false
-    }   
-
-    console.log("ARRRHHH")
+    }
 
     const body = {
       jadwalOperasional: newJadwal,
@@ -224,7 +218,6 @@ export default function EditJadwal() {
   }
 
   const handleSwitchChange = async (index: number, checked: boolean) => {
-    console.log(checked)
     let newData = [...jadwal]
 
     newData[index].isOpen = checked
@@ -291,6 +284,7 @@ export default function EditJadwal() {
                   </TableCell>
                   <TableCell>
                     <TimePicker
+                      className="change-color"
                       disabled={
                         item.isFromUser
                           ? user?.jadwalOperasional?.find(

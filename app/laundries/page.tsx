@@ -30,7 +30,6 @@ export default function Laundries() {
   const [laundries, setLaundries] = useState<Laundry[]>([])
   const [loading, setLoading] = useState(true)
   const { toast } = useToast()
-  const { setAccessToken } = useAuthContext()
 
   useEffect(() => {
     setLoading(true)
@@ -55,7 +54,6 @@ export default function Laundries() {
         })
       } else {
         const laundries = data.data
-        console.log(laundries)
 
         setLaundries(laundries)
       }
