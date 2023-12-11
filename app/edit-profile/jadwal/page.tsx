@@ -109,6 +109,8 @@ export default function EditJadwal() {
   }
   useEffect(() => {
     initJadwal()
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
 
   const timeFormat = 'HH:mm'
